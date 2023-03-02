@@ -48,8 +48,8 @@ multi sub compile-str(Str:D $name = "p{DateTime.now.posix}", Str:D :$code --> St
       if $tmp ~~ m/^ <+alnum>+ $/ {
         $out ~= "  \$out ~= \%ctx\{'{$tmp}'\}//'';\n";
       } else {
-        $tmp ~~ s:g/ (<|w>)(<+alnum>+)(<|w>) /$0\%ctx<$1>$2/;
-        $out ~= "  \$out ~= $tmp;\n";
+        $tmp ~~ s:g/ <?after ^|<+[ \r\n\t{}()\.]>> (<+alnum>+) <?before <+[ \r\n\t(){}\.]>|$> /\%ctx<$0>/;
+        $out ~= "  \$out ~= $tmp // '';\n";
       }
       $idx += $closelen;
       $cidx = $idx;

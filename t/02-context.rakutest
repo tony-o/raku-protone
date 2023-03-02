@@ -2,7 +2,7 @@ use Test;
 use Protone;
 use Protone::Context;
 
-plan 2;
+plan 3;
 
 my $ctx = Protone::Context.new;
 
@@ -10,8 +10,12 @@ $ctx.compile('hello', :code('hello {{name}}.'));
 
 ok $ctx.run('hello', name => 'tony-o') eq 'hello tony-o.';
 
-$ctx.register('flip', -> $s { $s.flip; });
+$ctx.register('reverse', -> $s { $s.flip; });
 
-$ctx.compile('olleh', :code('hello {{flip(name)}}.'));
+$ctx.compile('olleh', :code('hello {{reverse(name)}}.'));
 
 ok $ctx.run('olleh', name => 'tony-o') eq 'hello o-ynot.';
+
+$ctx.compile('test', :code('{{name.&flip}}'));
+
+ok $ctx.run('test', name => 'racecar1') eq '1racecar';
