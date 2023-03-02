@@ -1,0 +1,16 @@
+{
+  "auth": "zef:tonyo",
+  "build-depends": [
+  ],
+  "depends": [
+  ],
+  "description": "A nice compiled templating system",
+  "name": "protone",
+  "provides": {
+    "Protone": "lib/Protone.rakumod",
+    "Protone::Context": "lib/Protone/Context.rakumod"
+  },
+  "resources": [
+  ],
+  "version": "0.0.1"
+}

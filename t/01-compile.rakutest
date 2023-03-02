@@ -1,0 +1,27 @@
+use Test;
+use Protone;
+
+plan 5;
+
+my $templ = compile(code => q:to/EOF/);
+hello {{name}}.
+EOF
+
+# Greet ourselves
+ok $templ ~~ Callable;
+ok $templ(name => 'tony-o') eq "hello tony-o.\n";
+
+# Ensure opener/closer works as start/end
+ok compile(code => '{{x}}')(x=>'a') eq 'a';
+
+# Custom openers
+$Protone::OPEN  = '[[[[[[[[*';
+$Protone::CLOSE = '*]]]]]]]]';
+
+ok compile(code => 'a[[[[[[[[*b*]]]]]]]]a')(:b<a>) eq 'aaa';
+
+# Single char opener/closer
+$Protone::OPEN  = '<';
+$Protone::CLOSE = '>';
+
+ok compile(code => 'a<b>a')(:b<a>) eq 'aaa';
