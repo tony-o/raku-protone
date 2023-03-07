@@ -8,19 +8,19 @@ has %!context;
 
 multi method compile(Str:D $name, Str:D :$code, Bool:D :$for-spurt = False) {
   if $for-spurt {
-    %!spurts{$name}    = compile-str($name, :$code);
+    %!spurts{$name}    = compile-str($name, :$code, :args(%!context.keys));
     %!templates{$name} = %!spurts{$name}.EVAL;
   } else {
-    %!templates{$name} = compile(:$code);
+    %!templates{$name} = compile(:$code, :args(%!context.keys));
   }
 }
 
 multi method compile(Str:D $name, Str:D :$path, Bool:D :$for-spurt = False) {
   if $for-spurt {
-    %!spurts{$name}    = compile-str($name, :$path);
+    %!spurts{$name}    = compile-str($name, :$path, :args(%!context.keys));
     %!templates{$name} = %!spurts{$name}.EVAL;
   } else {
-    %!templates{$name} = compile(:$path);
+    %!templates{$name} = compile(:$path, :args(%!context.keys));
   }
 }
 
@@ -31,6 +31,7 @@ multi method available(--> List) {
 method run(Str:D $name, *%values) {
   die "$name requested is not found, available: {%!templates.keys.join(", ")}"
     unless %!templates{$name}:exists;
+
   %!templates{$name}(|%!context, |%values);
 }
 
